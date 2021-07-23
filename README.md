@@ -34,14 +34,14 @@ The prototypical demo should be used to clarify open questions between Fractal a
 
 ##### Spring Boot Demo Application
 
-* Set "client_secret" from Keycloak Client as `keycloak.client-secret` in `application.properties`
+* Set "client_secret" from Keycloak Client as `keycloak.client-secret` in `src/main/resources/application.properties`
 
 #### Setup Demo Environment
 
 * Repo is cloned locally
 * Keycloak is running at *localhost:8080*
 * Keycloak configuration according to steps mentioned (Realm, Client, Users, Mappers)
-* *client_secret* (copied from Keycloak Client/Credentials/Secret) was added to `src/main/resources/application.properties`
+* "client_secret" was added as `keycloak.client-secret` to `application.properties`
 * Start Application with `mvn spring-boot:run`
 
 #### Run Demo
