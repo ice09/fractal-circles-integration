@@ -43,7 +43,7 @@ The prototypical demo should be used to clarify open questions between Fractal a
 * Keycloak is running at *localhost:8080*
 * Keycloak configuration according to steps mentioned (Realm, Client, Users, Mappers)
 * *client_secret* was added to `application.properties` in Repo (src/main/resources)
-* Start Application with `mvn sprng-boot:run`
+* Start Application with `mvn spring-boot:run`
 
 #### Run Demo
 
