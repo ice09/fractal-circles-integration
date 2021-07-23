@@ -11,9 +11,9 @@ The prototypical demo should be used to clarify open questions between Fractal a
 
 ##### Installations
 
-* Java 11 is installed
-* Maven is installed
-* Keycloak is installed
+* Java 11+
+* Maven 3+
+* Keycloak 14+
 
 ##### Setup
 
