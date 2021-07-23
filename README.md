@@ -21,17 +21,16 @@ The prototypical demo should be used to clarify open questions between Fractal a
 
 * Create Realm "circles"
 * Create Client "verification"
-    * "Valid Redirect URL": http://localhost:8989/auth
+    * Set "Valid Redirect URL": http://localhost:8989/auth
+    * Set "Access-Type" to "Confidential"
+        * Copy "client_secret" from "Credentials" tab for later use
+    * Set "Create Protocol Mapper": "wallet-address"
+      * Set "Mapper Type": "User Attribute"
+      * Set "User Attribute", "Claim Name", "Token Claim Name": "wallet_address"
+      * Set "Claim JSON Type": "String"
 * Create User "circles_user"
     * Add attribute "wallet-address": "0x01"
     * Set non-temporary password for "circles_user"
-* Create Client
-    * Set "Access-Type" to "Confidential"
-        * Copy "client_secret" from "Credentials" tab for later use
-    * "Create Protocol Mapper": "wallet-address"
-    * "Mapper Type": "User Attribute"
-    * User Attribute, Claim Name, Token Claim Name: "wallet_address"
-    * "Claim JSON Type": "String"
 
 ##### Spring Boot Demo Application
 
@@ -42,7 +41,7 @@ The prototypical demo should be used to clarify open questions between Fractal a
 * Repo is cloned locally
 * Keycloak is running at *localhost:8080*
 * Keycloak configuration according to steps mentioned (Realm, Client, Users, Mappers)
-* *client_secret* was added to `application.properties` in Repo (src/main/resources)
+* *client_secret* (copied from Keycloak Client/Credentials/Secret) was added to `src/main/resources/application.properties`
 * Start Application with `mvn spring-boot:run`
 
 #### Run Demo
