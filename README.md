@@ -22,7 +22,7 @@ The prototypical demo should be used to clarify open questions between Fractal a
 * Create Realm "circles"
 * Create Client "verification"
     * "Valid Redirect URL": http://localhost:8989/auth
-* Create User *circles_user*
+* Create User "circles_user"
     * Add attribute "wallet-address": "0x01"
     * Set non-temporary password for "circles_user"
 * Create Client
