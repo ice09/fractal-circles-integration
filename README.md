@@ -29,7 +29,7 @@ The prototypical demo should be used to clarify open questions between Fractal a
       * Set "User Attribute", "Claim Name", "Token Claim Name": "wallet_address"
       * Set "Claim JSON Type": "String"
 * Create User "circles_user"
-    * Add attribute "wallet-address": "0x01"
+    * Add attribute "wallet-address": "0x0523"
     * Set non-temporary password for "circles_user"
 
 ##### Spring Boot Demo Application
@@ -48,7 +48,14 @@ The prototypical demo should be used to clarify open questions between Fractal a
 
 * Call Authentication URL Demo Setup:
   http://localhost:8080/auth/realms/circles/protocol/openid-connect/auth?client_id=verification&response_type=code&redirect_uri=http://localhost:8989/auth
+* A successful service call (with successful login of user "circles_user" and redirect) will return the Bearer Token for user "circles_user". Use this Bearer Token for Authorization of the service at `/users/me`
 
+
+    // Keycloak Bearer Token Request
+    GET http://localhost:8989/users/me
+    Authorization: Bearer ${BEARER_TOKEN}
+
+The result should be the "wallet-address" stored with the "circles_user" in Keycloak.
 
 ##### Important URLs
 
