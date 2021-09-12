@@ -25,19 +25,33 @@ The sequence below documents a Keycloak Mock for the Fractal OAuth2 Flow, howeve
 * Properties `oauth2.client-id` and `oauth2.client-secret` are set in `application.properties`
 * Start Application with `mvn spring-boot:run`
 
+#### Enable external Access
+
+* Use [ngrok](https://ngrok.com/) to connect an external URL to the service on port 8989
+* Set Property `oauth2.redirect-url` with the URL + "/auth"
+
+#### Start local Hardhat
+
+* Start [Hardhat](https://hardhat.org/) local node with the default mnemonic `test test test test test test test test test test test junk`
+
 #### Run Demo
 
-* Call Redirect URL Setup Endpoint
+* Call Redirect URL Setup Endpoint (see `fractal-script.http`: GET http://localhost:8989/createRedirect)
 * Open the Redirect URL in a Browser and execute the Fractal Flow
 * Open the URL in the Email from Fractal
-* The result will be your UserID (UID) displayed on the result page
-* Use this UID in the POST Request in `fractal-script.http` (see below)
-* The Result of this POST Request will be the Transaction Hash of the Transaction `addMember` on the `GroupCurrencyToken` contract
+* The result of the call will be your UserID (UID) displayed on the result page
+* Use this UID in the POST Request in `fractal-script.http`
+* The Result of this POST Request will be the Transaction Hash of executing `GroupCurrencyToken.addMember`
 
 ### Testing the Group Currency Token with VS Code
 
 All the steps above are included in the `fractal-script.http` file in root directory.  
 To execute the tests, [VS Code](https://code.visualstudio.com/) must be installed with the [REST plugin](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
+
+### Known Issues
+
+* The signed Secret Token in the Webhook callback is not verified.
+* For simplicity, it is assumed that the callback is always an approval (no rejection) and has to be called for whitelisting.
 
 ### Additional Information
 
