@@ -79,6 +79,7 @@ public class AuthorizationCode {
                 Unirest.get(resourceUrl + "/users/me")
                         .header("Authorization", "Bearer " + accessToken).asString();
         String uid = JsonPath.parse(uDetails.getBody()).read("uid").toString();
+        // TODO: Change state of request result, might be verified already
         storage.storeUserIdForStateId(state, uid);
         return ResponseEntity.ok(uid);
     }
@@ -87,7 +88,11 @@ public class AuthorizationCode {
     public ResponseEntity<String> callback(@RequestBody VerificationDTO verificationDTO) {
         String userId = verificationDTO.getData().getUser_id();
         log.info("uid={}", userId);
-        return ResponseEntity.ok(storage.readWalletAddressForUID(userId));
+        String walletAddress = storage.readWalletAddressForUID(userId);
+        // TODO: Change state of status corresponding to result of "verification-type"
+        // For now we assume that only after the Webhook callback the result is ok (we don't check here)
+        // and whitelist the wallet address in the Group Currency Token
+        return ResponseEntity.ok(walletAddress);
     }
 
 }
