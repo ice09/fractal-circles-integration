@@ -16,6 +16,8 @@ The sequence below documents a Keycloak Mock for the Fractal OAuth2 Flow, howeve
 
 * Java 11+
 * Maven 3+
+* [ngrok](https://ngrok.com/) for external access
+* [Hardhat](https://hardhat.org/) for local Ethereum node
 
 #### Configurations
 
@@ -23,7 +25,7 @@ The sequence below documents a Keycloak Mock for the Fractal OAuth2 Flow, howeve
 
 * Repo branch _fractal_ is cloned locally
 * Properties `oauth2.client-id` and `oauth2.client-secret` are set in `application.properties`
-* Start Application with `mvn spring-boot:run`
+* Properties can be retrieved from Fractal developer dashboard
 
 #### Enable external Access
 
@@ -36,6 +38,7 @@ The sequence below documents a Keycloak Mock for the Fractal OAuth2 Flow, howeve
 
 #### Run Demo
 
+* Start Application with `mvn spring-boot:run`
 * Call Redirect URL Setup Endpoint (see `fractal-script.http`: GET http://localhost:8989/createRedirect)
 * Open the Redirect URL in a Browser and execute the Fractal Flow
 * Open the URL in the Email from Fractal
