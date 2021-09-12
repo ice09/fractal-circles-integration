@@ -19,8 +19,6 @@ The sequence below documents a Keycloak Mock for the Fractal OAuth2 Flow, howeve
 * [ngrok](https://ngrok.com/) for external access
 * [Hardhat](https://hardhat.org/) for local Ethereum node
 
-#### Configurations
-
 #### Setup Demo Environment
 
 * Repo branch _fractal_ is cloned locally
@@ -55,6 +53,7 @@ To execute the tests, [VS Code](https://code.visualstudio.com/) must be installe
 
 * The signed Secret Token in the Webhook callback is not verified.
 * For simplicity, it is assumed that the callback is always an approval (no rejection) and has to be called for whitelisting.
+* Wallet address is currently a randomly generated Ethereum address. In real life, it should be the CRC Token address of the Circles User.
 
 ### Additional Information
 
