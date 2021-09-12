@@ -1,8 +1,11 @@
 # Fractal Circles Integration Demo Setup
-These instructions help to create a demo setup for the Fractal-Circles-Integration with the Authentication part mocked by Keycloak.  
+These instructions help to create a demo setup for the Fractal-Circles-Integration.  
 The prototypical demo should be used to clarify open questions between Fractal and Circles.  
 
 ## Authorization Grant Flow Call Sequence
+
+The sequence below documents a Keycloak Mock for the Fractal OAuth2 Flow, however this demo uses the actual Fractal staging test environment. The flow itself is the same for both demos.
+
 ![flow](https://drive.google.com/uc?export=view&id=19DZx6dloY_LGnqKnw5k2yVyrFOyC8i9e)
 
 ## Start Authorization Grant Flow with Authentication URL
@@ -13,57 +16,23 @@ The prototypical demo should be used to clarify open questions between Fractal a
 
 * Java 11+
 * Maven 3+
-* Keycloak 14+
 
 #### Configurations
 
-##### Keycloak
-
-* Create Realm "circles"
-* Create Client "verification"
-    * Set "Valid Redirect URL": http://localhost:8989/auth
-    * Set "Access-Type" to "Confidential"
-        * Copy "client_secret" from "Credentials" tab for later use
-    * Set "Create Protocol Mapper": "wallet-address"
-      * Set "Mapper Type": "User Attribute"
-      * Set "User Attribute", "Claim Name", "Token Claim Name": "wallet_address"
-      * Set "Claim JSON Type": "String"
-* Create User "circles_user"
-    * Add attribute "wallet-address": "0x0523"
-    * Set non-temporary password for "circles_user"
-
-##### Spring Boot Demo Application
-
-* Set "client_secret" from Keycloak Client as `keycloak.client-secret` in `src/main/resources/application.properties`
-
 #### Setup Demo Environment
 
-* Repo is cloned locally
-* Keycloak is running at *localhost:8080*
-* Keycloak configuration according to steps mentioned (Realm, Client, Users, Mappers)
-* "client_secret" was added as `keycloak.client-secret` to `application.properties`
+* Repo branch _fractal_ is cloned locally
+* Properties `oauth2.client-id` and `oauth2.client-secret` are set in `application.properties`
 * Start Application with `mvn spring-boot:run`
 
 #### Run Demo
 
-* Call Authentication URL Demo Setup:
-  http://localhost:8080/auth/realms/circles/protocol/openid-connect/auth?client_id=verification&response_type=code&redirect_uri=http://localhost:8989/auth
-* A successful service call (with successful login of user "circles_user" and redirect) will return the Bearer Token for user "circles_user". Use this Bearer Token for Authorization of the service at `/users/me`
-
-```
-// Keycloak Bearer Token Request
-GET http://localhost:8989/users/me
-Authorization: Bearer ${BEARER_TOKEN}
-```
-
-The result should be the "wallet-address" stored with the "circles_user" in Keycloak.
-
-##### Important URLs
-
-* Real Fractal URL Integration Test: https://next.fractal.id/authorize?client_id=mclp5nB-iLXT2DJhP_Km1pL_JaZveFVw8qg44JQPc0c&redirect_uri=https%3A%2F%2Fgist.githubusercontent.com%2Fice09%2F87509a1ecafd9ddd73e02c6ebc5b005d%2Fraw%2F8b23e325b11d35358fa1ced2de3aff2ddaa9fb2a%2Fanyblock_analytics_sql.sql&response_type=code&scope=contact%3Aread%20verification.light%3Aread%20verification.selfie%3Aread
-
-* Keycloak Mock
-    * well-known-URL: http://localhost:8080/auth/realms/circles/.well-known/openid-configuration
+* Call Redirect URL Setup Endpoint
+* Open the Redirect URL in a Browser and execute the Fractal Flow
+* Open the URL in the Email from Fractal
+* The result will be your UserID (UID) displayed on the result page
+* Use this UID in the POST Request in `fractal-script.http` (see below)
+* The Result of this POST Request will be the Transaction Hash of the Transaction `addMember` on the `GroupCurrencyToken` contract
 
 ### Testing the Group Currency Token with VS Code
 
