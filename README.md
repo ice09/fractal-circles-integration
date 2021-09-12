@@ -64,3 +64,23 @@ The result should be the "wallet-address" stored with the "circles_user" in Keyc
 
 * Keycloak Mock
     * well-known-URL: http://localhost:8080/auth/realms/circles/.well-known/openid-configuration
+
+### Testing the Group Currency Token with VS Code
+
+All the steps above are included in the `fractal-script.http` file in root directory.  
+To execute the tests, [VS Code](https://code.visualstudio.com/) must be installed with the [REST plugin](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
+
+### Additional Information
+
+#### Flatten & Compile GroupCurrencyToken
+* Clone [circles-fork](https://github.com/ice09/circles-contracts) to folder `${circles.git}/contracts`
+* Install [remixd-server](https://github.com/ethereum/remix-project/tree/master/libs/remixd)
+* Start remixd-server with folder `${circles.git}/contracts` and URL http://remix.ethereum.org/
+  * Open  [remix-ide](http://remix.ethereum.org/)
+    * Install Flattener in Remix-IDE, Flatten `GroupCurrencyToken.sol`
+    * Connect to localhost
+    * Load `GroupCurrencyToken_flat.sol`
+      * Change `pragma solidity ^0.7.0;` in all `*.sol`
+      * Remove "unchecked" from flattened contract
+      * Store flattened Solidity file under `/src/main/resources/solidity`
+      * Build with `mvn clean package`

@@ -5,12 +5,19 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.gas.DefaultGasProvider;
+import tech.blockchainers.GroupCurrencyToken;
+import tech.blockchainers.circles.config.CredentialHolder;
 import tech.blockchainers.circles.rest.dto.VerificationDTO;
 import tech.blockchainers.circles.storage.IStorage;
 
+import javax.annotation.PostConstruct;
 import java.math.BigInteger;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -35,13 +42,27 @@ public class AuthorizationCode {
     @Value("${oauth2.resource-url}")
     private String resourceUrl;
 
-    @Value("${oauth2.redirect-url:https://3b17-2003-ce-7f14-3f9c-5dc6-bcc5-aafb-16e5.ngrok.io/auth}")
+    @Value("${oauth2.redirect-url}")
     private String redirectUrl;
+
+    @Autowired
+    private Web3j web3j;
+
+    @Autowired
+    private CredentialHolder credentialHolder;
 
     private final IStorage storage;
 
+    private GroupCurrencyToken token;
+
     public AuthorizationCode(IStorage storage) {
         this.storage = storage;
+    }
+
+    @PostConstruct
+    public void deployToken() throws Exception {
+        token = GroupCurrencyToken.deploy(web3j, credentialHolder.deriveChildKeyPair(0), new DefaultGasProvider(),
+                "0x0", "0x0", BigInteger.ONE, "TKN", "TKN").send();
     }
 
     /*
@@ -85,14 +106,15 @@ public class AuthorizationCode {
     }
 
     @PostMapping("/callback")
-    public ResponseEntity<String> callback(@RequestBody VerificationDTO verificationDTO) {
+    public ResponseEntity<String> callback(@RequestBody VerificationDTO verificationDTO) throws Exception {
         String userId = verificationDTO.getData().getUser_id();
         log.info("uid={}", userId);
         String walletAddress = storage.readWalletAddressForUID(userId);
         // TODO: Change state of status corresponding to result of "verification-type"
         // For now we assume that only after the Webhook callback the result is ok (we don't check here)
         // and whitelist the wallet address in the Group Currency Token
-        return ResponseEntity.ok(walletAddress);
+        TransactionReceipt rec = token.addMemberToken(walletAddress).send();
+        return ResponseEntity.ok(rec.getTransactionHash());
     }
 
 }
